@@ -6,41 +6,42 @@ Vue.component('create-task', {
         <label for="task-name">Название заметки</label>
         <input v-model="title" type="text">
         
-        <button type="">Отправить</button>
-        
         <div class="tasks-list" v-for="task in tasks">
             <div class="task">
-                <input value="{{task.name}}"/>
-                <button @click="deleteTask(task.id)">-</button>
+                <input :value="task.name" @input="event => task.name = event.target.value"/>
+                <button @click="deleteTask(task.id)">Удалить</button>
             </div>
+        </div>
+
+        <div>
+            <button>Добавить задачу</button>
+            <button @click="show">Отправить</button>
         </div>
     </div>`,
     data() {
         return {
             title: "",
             tasks: [
-                { id: "0", name: "Task 0" },
-                { id: "1", name: "Task 1" },
-                { id: "2", name: "Task 2" },
+                { id: "0", name: "Task 0", done: false },
+                { id: "1", name: "Task 1", done: false },
+                { id: "2", name: "Task 2", done: false },
             ],
         };
     },
     methods: {
-        addTackCard() {
-            const title = this.title;
-            const description = this.description;
-            let notes = JSON.parse(localStorage.getItem('notes')) || [];
-            notes.push({ title, description });
-            localStorage.setItem('notes', JSON.stringify(notes));
-            window.location.reload();
-            this.title = "";
-            this.description = "";
-            this.notes = notes;
+        deleteTask(id) {
+            if (this.tasks.length === 3) {
+                alert("Нельзя удалить задачу, в листе должно быть 3 задачи");
+                return;
+            }
+            for (let i = 0; i < this.tasks.length; i++) {
+                if (this.tasks[i].id == id) {
+                    this.tasks.splice(i, 1);
+                }
+            }
         },
-        deleteTask (id) {
-            console.log("Delete");
+        show() {
             console.log(this.tasks);
-            console.log(id);
         }
     }
 });
