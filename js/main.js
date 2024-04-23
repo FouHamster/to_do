@@ -21,13 +21,34 @@ Vue.component('create-card', {
         </div>
         <div class="colums">
                 <div class="colum">
-                    <p>ffjdhfjkdfjgsdhfdsf</p>
+                    <div class="card" v-for="card in cards" v-if="card.column == 0">
+                        <p>Название: {{card.title}}</p>
+                        <div class="tasks-list" v-for="task in card.tasks">
+                            <div class="task" @click="finishTask(card.id, task.id, task)">
+                                <p :class="{'strike': task.done }">{{task.name}}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="colum">
-                <p>ffjdhfjkdfjgsdhfdsf3</p>
+                    <div class="card" v-for="card in cards" v-if="card.column == 1">
+                        <p>Название: {{card.title}}</p>
+                        <div class="tasks-list" v-for="task in card.tasks">
+                            <div class="task" @click="finishTask(card.id, task.id, task)">
+                                <p :class="{'strike': task.done }">{{task.name}}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="colum">
-                <p>ffjdhfjkdfjgsdhfdsf2</p>
+                    <div class="card" v-for="card in cards" v-if="card.column == 2">
+                        <p>Название: {{card.title}}</p>
+                        <div class="tasks-list" v-for="task in card.tasks">
+                            <div class="task" @click="finishTask(card.id, task.id, task)">
+                                <p :class="{'strike': task.done }">{{task.name}}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
         </div>
     </div>
@@ -74,7 +95,8 @@ Vue.component('create-card', {
             let cardItem = {
                 id: this.cards.length + 1,
                 title: this.title,
-                tasks: this.tasks
+                tasks: this.tasks,
+                column: 0
             };
 
             this.cards.push(cardItem);
@@ -87,6 +109,28 @@ Vue.component('create-card', {
                 { id: "1", name: "Task 1", done: false },
                 { id: "2", name: "Task 2", done: false },
             ];
+        },
+        finishTask(cardId, taskId, task) {
+            let doneTasks = 0;
+            for (let i = 0; i < this.cards.length; i++) {
+                if (this.cards[i].id == cardId) {
+                    for (let j = 0; j < this.cards[i].tasks.length; j++) {
+                        if (this.cards[i].tasks[j].id == taskId) {
+                            this.cards[i].tasks[j].done = true;
+                            task.done = true;
+                        }
+                        if (this.cards[i].tasks[j].done) {
+                            doneTasks++;
+                        }
+                    }
+
+                    let halfDoneTasks = doneTasks / this.cards[i].tasks.length;
+                    if (halfDoneTasks >= 0.5) {
+                        this.cards[i].column = 1; 
+                        console.log(this.cards[i]);
+                    }
+                }
+            }
         }
     }
 });
