@@ -1,0 +1,40 @@
+.glav {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+
+}
+
+input {
+    margin: 10px;
+}
+
+.colum {
+    width: 600px;
+    /*border: 1px black solid;*/
+    box-shadow: 0px 0px 3px black;
+
+
+}
+
+.card {
+    box-shadow: 0px 0px 3px black;
+    width: 550px;
+    margin-left: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.tex {
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
+li {
+    cursor: pointer;
+}
