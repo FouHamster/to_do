@@ -99,8 +99,28 @@ Vue.component('create-card', {
                 column: 0
             };
 
+            let firstColumnCards = 0;
+            for (let i = 0; i < this.cards.length; i++) {
+                if (this.cards[i].column == 0) {
+                    firstColumnCards++;
+                }
+            }
+
+            if (firstColumnCards == 3) {
+                alert("В первой колонке максимальное количество карточек");
+                return;
+            }
+
+            // if (firstColumnCards == 3 && secondColumnCards == 5) {
+            //     alert("5 во второй 3 в первой")
+            //     for (let i = 0; i < this.cards.length; i++) {
+            //         if (this.cards[i].column == 0) {
+            //             // блок
+            //         }
+            //     }
+            // }
+
             this.cards.push(cardItem);
-            console.log(this.cards);
 
             // занулить данные формы
             this.title = "";
@@ -124,11 +144,18 @@ Vue.component('create-card', {
                         }
                     }
 
-                    let halfDoneTasks = doneTasks / this.cards[i].tasks.length;
-                    if (halfDoneTasks >= 0.5) {
-                        this.cards[i].column = 1; 
-                        console.log(this.cards[i]);
-                    }
+                    // блокируем количество карточек во второй колонке
+                    // let halfDoneTasks = doneTasks / this.cards[i].tasks.length;
+                    // if (halfDoneTasks >= 0.5) {
+                    //     this.cards[i].column = 1;
+                        
+                    //     let secondColumnCards = 0;
+                    //     for (let i = 0; i < this.cards.length; i++) {
+                    //         if (this.cards[i].column == 1) {
+                    //             secondColumnCards++;
+                    //         }
+                    //     }
+                    // }
                 }
             }
         }
