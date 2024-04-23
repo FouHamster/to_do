@@ -1,95 +1,62 @@
-let colum1 = new Vue({
-    el: '#colum1',
-    data: {
-        currentTask: '',
-        editValue: '',
-        tasks: [
-            {
-                text: 'Subscribe to channel',
-                isCompleted: false,
-                isEditing: false
-            },
-            {
-                text: 'Like the video',
-                isCompleted: false,
-                isEditing: false
-            },
-            {
-                text: 'Learn Vue.js',
-                isCompleted: true,
-                isEditing: false
-            }
-        ],
-        currentCard: '',
-        cards: [
-            {
-              text: "New card",
-            },
-        ],
+Vue.component('create-task', {
+    template: `
+    <div class="create-task">
+        <h1>Добавить карточку:</h1>
+        
+        <label for="task-name">Название заметки</label>
+        <input v-model="title" type="text">
+        
+        <button type="">Отправить</button>
+        
+        <div class="tasks-list" v-for="task in tasks">
+            <div class="task">
+                <input value="{{task.name}}"/>
+                <button @click="deleteTask(task.id)">-</button>
+            </div>
+        </div>
+    </div>`,
+    data() {
+        return {
+            title: "",
+            tasks: [
+                { id: "0", name: "Task 0" },
+                { id: "1", name: "Task 1" },
+                { id: "2", name: "Task 2" },
+            ],
+        };
     },
     methods: {
-        addTask: function() {
-            this.tasks.push({
-                text: this.currentTask,
-                isCompleted: false,
-            });
-            this.currentTask = '';
+        addTackCard() {
+            const title = this.title;
+            const description = this.description;
+            let notes = JSON.parse(localStorage.getItem('notes')) || [];
+            notes.push({ title, description });
+            localStorage.setItem('notes', JSON.stringify(notes));
+            window.location.reload();
+            this.title = "";
+            this.description = "";
+            this.notes = notes;
         },
-        removeTask: function(taskText) {
-            this.tasks = this.tasks.filter(task => {
-                return task.text !== taskText;
-            })
-        },
-        changeEditing: function(taskText) {
-            this.editValue = taskText;
-            this.tasks = this.tasks.map(task => {
-                if(task.text === taskText) {
-                    task.isEditing = !task.isEditing;
-                }
-                return task;
-            })
-        },
-        editTask: function(taskText) {
-            this.tasks = this.tasks.map(task => {
-                if(task.text === taskText) {
-                    task.isEditing = !task.isEditing;
-                    task.text = this.editValue;
-                }
-                return task;
-            })
-        },
-        addCard: function() {
-            this.cards.push({
-                text: this.currentCard,
-            });
-            this.currentCard = '';
-        },
-    },
-    computed: {
+        deleteTask (id) {
+            console.log("Delete");
+            console.log(this.tasks);
+            console.log(id);
+        }
+    }
+});
 
-    },
-})
-
-let colum2 = new Vue({
-    el: '#colum2',
+let app = new Vue({
+    el: '#app',
     data: {
+        premium: true,
+        cart: []
     },
     methods: {
-
-    },
-    computed: {
-
-    },
-})
-
-let colum3 = new Vue({
-    el: '#colum3',
-    data: {
-    },
-    methods: {
-
-    },
-    computed: {
-
-    },
+        updateCart(id) {
+            this.cart.push(id);
+        },
+        deleteCart() {
+            this.cart.pop();
+        },
+    }
 })

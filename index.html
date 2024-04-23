@@ -1,52 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <script defer src="js/vue.js"></script>
     <script defer src="js/main.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Title</title>
 </head>
+
 <body>
-    <div class="glav">
-        <div id="colum1" class="colum">
-            <input type="text" @keyup.enter="addCard" v-model="currentCard">
-                <div v-for="card in cards" class="card">
-                    <input type="text"
-                           @keyup.enter="addTask"
-                           v-model="currentTask"
-                    >
-                    <p class="tex">{{card.text}}</p>
-                    <ul>
-                        <li
-                                v-for="task in tasks"
-                                :class="{'strike': task.isCompleted}"
-                        >
-                            <input
-                                    type="text"
-                                    v-if="task.isEditing"
-                                    @keyup.enter="editTask(task.text)"
-                                    v-model="editValue"
-                            >
-                            <span
-                                    v-else
-                                    @click="task.isCompleted = !task.isCompleted"
-                            >{{task.text}}</span>
-                            <button @click="removeTask(task.text)">Удалить</button>
-                            <button @click="changeEditing(task.text)">Редактировать</button>
-                        </li>
-                    </ul>
-                </div>
-
-        </div>
-
-        <div id="colum2" class="colum">
-
-        </div>
-
-        <div id="colum3" class="colum">
-
-        </div>
+    <div id="app" class="glav">
+        <create-task></create-task>    
     </div>
 </body>
+
 </html>
