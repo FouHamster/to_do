@@ -145,10 +145,10 @@ Vue.component('create-card', {
                     }
 
                     // блокируем количество карточек во второй колонке
-                    // let halfDoneTasks = doneTasks / this.cards[i].tasks.length;
-                    // if (halfDoneTasks >= 0.5) {
-                    //     this.cards[i].column = 1;
-                        
+                    let halfDoneTasks = doneTasks / this.cards[i].tasks.length;
+                    if (halfDoneTasks >= 0.5) {
+                        this.cards[i].column = 1;
+                    }
                     //     let secondColumnCards = 0;
                     //     for (let i = 0; i < this.cards.length; i++) {
                     //         if (this.cards[i].column == 1) {
