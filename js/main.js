@@ -5,12 +5,12 @@ Vue.component('create-card', {
             <h1>Добавить карточку:</h1>
             
             <label for="task-name">Название заметки</label>
-            <input v-model="title" type="text">
+            <input v-model="title" type="text">     <!-- v-model?  -->
             
-            <div class="tasks-list" v-for="task in tasks">
+            <div class="tasks-list" v-for="task in tasks">   <!-- отоброжает поля задач  -->
                 <div class="task">
-                    <input :value="task.name" @input="event => task.name = event.target.value"/>
-                    <button @click="deleteTask(task.id)">Удалить</button>
+                    <input :value="task.name" @input="event => task.name = event.target.value"/> <!-- :value = "task.name" передаёт значение name из массива tasks для каждого task; @input? для чего, что делает, как называется -->
+                    <button @click="deleteTask(task.id)">Удалить</button> <!-- Удаляет задачу по id -->
                 </div>
             </div>
 
@@ -24,7 +24,7 @@ Vue.component('create-card', {
                     <div class="card" v-for="card in cards" v-if="card.column == 0">
                         <p>Название: {{card.title}}</p>
                         <div class="tasks-list" v-for="task in card.tasks">
-                            <div class="task" @click="finishTask(card.id, task.id, task)">
+                            <div class="task" @click="finishTask(card.id, task.id)">
                                 <p :class="{'strike': task.done }">{{task.name}}</p>
                             </div>
                         </div>
@@ -34,7 +34,7 @@ Vue.component('create-card', {
                     <div class="card" v-for="card in cards" v-if="card.column == 1">
                         <p>Название: {{card.title}}</p>
                         <div class="tasks-list" v-for="task in card.tasks">
-                            <div class="task" @click="finishTask(card.id, task.id, task)">
+                            <div class="task" @click="finishTask(card.id, task.id)">
                                 <p :class="{'strike': task.done }">{{task.name}}</p>
                             </div>
                         </div>
@@ -44,7 +44,7 @@ Vue.component('create-card', {
                     <div class="card" v-for="card in cards" v-if="card.column == 2">
                         <p>Название: {{card.title}}</p>
                         <div class="tasks-list" v-for="task in card.tasks">
-                            <div class="task" @click="finishTask(card.id, task.id, task)">
+                            <div class="task" @click="finishTask(card.id, task.id)">
                                 <p :class="{'strike': task.done }">{{task.name}}</p>
                             </div>
                         </div>
@@ -68,12 +68,12 @@ Vue.component('create-card', {
 
     methods: {
         deleteTask(id) {
-            if (this.tasks.length === 3) {
+            if (this.tasks.length === 3) {      //Проверяет длину массива tasks  Почему обращение идёт через точку?
                 alert("Нельзя удалить задачу, в листе должно быть 3 задачи");
                 return;
             }
 
-            for (let i = 0; i < this.tasks.length; i++) {
+            for (let i = 0; i < this.tasks.length; i++) { 
                 if (this.tasks[i].id == id) {
                     this.tasks.splice(i, 1);
                 }
@@ -130,33 +130,55 @@ Vue.component('create-card', {
                 { id: "2", name: "Task 2", done: false },
             ];
         },
-        finishTask(cardId, taskId, task) {
-            let doneTasks = 0;
+        finishTask(cardId, taskId) {
+            console.log("finishTask")
+            // блокирование карт из 1 столбца при 5 картах во втором
+            let firstColumnCards = 0;
+            let secondColumnCards = 0;
             for (let i = 0; i < this.cards.length; i++) {
-                if (this.cards[i].id == cardId) {
-                    for (let j = 0; j < this.cards[i].tasks.length; j++) {
-                        if (this.cards[i].tasks[j].id == taskId) {
-                            this.cards[i].tasks[j].done = true;
-                            task.done = true;
-                        }
-                        if (this.cards[i].tasks[j].done) {
-                            doneTasks++;
-                        }
-                    }
-
-                    // блокируем количество карточек во второй колонке
-                    let halfDoneTasks = doneTasks / this.cards[i].tasks.length;
-                    if (halfDoneTasks >= 0.5) {
-                        this.cards[i].column = 1;
-                    }
-                    //     let secondColumnCards = 0;
-                    //     for (let i = 0; i < this.cards.length; i++) {
-                    //         if (this.cards[i].column == 1) {
-                    //             secondColumnCards++;
-                    //         }
-                    //     }
-                    // }
+                if (this.cards[i].column == 0) {
+                    firstColumnCards++;
                 }
+                if (this.cards[i].column == 1) {
+                    secondColumnCards++;
+                }
+            }
+
+            let currentCard = this.cards.find(card => card.id == cardId);
+            console.log(currentCard)
+
+            let doneTasks = 0;
+            let globalCurrentTask = {};
+            for (let i = 0; i < currentCard.tasks.length; i++) {
+                let currentTask = currentCard.tasks[i];
+                if (currentTask.id == taskId) {
+                    currentTask.done = true;
+                    globalCurrentTask = currentTask;
+                }
+                if (currentCard.tasks[i].done) {
+                    doneTasks++;
+                }
+            }
+
+
+
+            let halfDoneTasks = doneTasks / currentCard.tasks.length;
+            if (firstColumnCards == 3 && secondColumnCards == 5 &&
+                currentCard.column == 0 && halfDoneTasks >= 0.5)
+            {
+                globalCurrentTask.done = false;
+                alert("Освободите место во второй колонке");
+                return;
+            }
+
+             // переносим карточку во второй столбец если кол-во выполненных заданий > 50%
+            if (halfDoneTasks >= 0.5) {
+                if (secondColumnCards == 5) {
+                    globalCurrentTask.done = false;
+                    alert("Максимальное количество карт во втором столбце");
+                    return;
+                }
+                currentCard.column = 1;
             }
         }
     }
