@@ -43,6 +43,7 @@ Vue.component('create-card', {
                 <div class="colum">
                     <div class="card" v-for="card in cards" v-if="card.column == 2">
                         <p>Название: {{card.title}}</p>
+                        <p>Время: {{card.date}}</p>
                         <div class="tasks-list" v-for="task in card.tasks">
                             <div class="task" @click="finishTask(card.id, task.id)">
                                 <p :class="{'strike': task.done }">{{task.name}}</p>
@@ -171,7 +172,17 @@ Vue.component('create-card', {
                 return;
             }
 
-             // переносим карточку во второй столбец если кол-во выполненных заданий > 50%
+            console.log(doneTasks == currentCard.tasks.length);
+            console.log(doneTasks);
+            console.log(currentCard.tasks.length);
+            console.log(currentCard.column);
+            // если задание выполнено на 100% то переносим в 3 столбец 
+            if (currentCard.column == 1 && doneTasks == currentCard.tasks.length) {
+                currentCard.column = 2;
+                return;
+            }
+
+            // переносим карточку во второй столбец если кол-во выполненных заданий > 50%
             if (halfDoneTasks >= 0.5) {
                 if (secondColumnCards == 5) {
                     globalCurrentTask.done = false;
@@ -179,6 +190,10 @@ Vue.component('create-card', {
                     return;
                 }
                 currentCard.column = 1;
+                let date = new Date();
+                let options = { weekday: 'long', year: 'numeric', month: 'long', 
+                    day: 'numeric', hour: 'numeric', minute:'numeric', second: 'numeric'};
+                currentCard.date = date.toLocaleDateString('ru', options)
             }
         }
     }
