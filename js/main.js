@@ -5,7 +5,7 @@ Vue.component('create-card', {
             <h1>Добавить карточку:</h1>
             
             <label for="task-name">Название заметки</label>
-            <input v-model="title" type="text">     <!-- v-model?  -->
+            <input v-model="title" type="text">     
             
             <div class="tasks-list" v-for="task in tasks">   <!-- отоброжает поля задач  -->
                 <div class="task">
@@ -69,7 +69,7 @@ Vue.component('create-card', {
 
     methods: {
         deleteTask(id) {
-            if (this.tasks.length === 3) {      //Проверяет длину массива tasks  Почему обращение идёт через точку?
+            if (this.tasks.length === 3) {     
                 alert("Нельзя удалить задачу, в листе должно быть 3 задачи");
                 return;
             }
@@ -100,6 +100,7 @@ Vue.component('create-card', {
                 column: 0
             };
 
+            //считаем кол-во карт в первой колонке
             let firstColumnCards = 0;
             for (let i = 0; i < this.cards.length; i++) {
                 if (this.cards[i].column == 0) {
@@ -112,15 +113,6 @@ Vue.component('create-card', {
                 return;
             }
 
-            // if (firstColumnCards == 3 && secondColumnCards == 5) {
-            //     alert("5 во второй 3 в первой")
-            //     for (let i = 0; i < this.cards.length; i++) {
-            //         if (this.cards[i].column == 0) {
-            //             // блок
-            //         }
-            //     }
-            // }
-
             this.cards.push(cardItem);
 
             // занулить данные формы
@@ -132,7 +124,6 @@ Vue.component('create-card', {
             ];
         },
         finishTask(cardId, taskId) {
-            console.log("finishTask")
             // блокирование карт из 1 столбца при 5 картах во втором
             let firstColumnCards = 0;
             let secondColumnCards = 0;
@@ -145,11 +136,11 @@ Vue.component('create-card', {
                 }
             }
 
-            let currentCard = this.cards.find(card => card.id == cardId);
-            console.log(currentCard)
+            let currentCard = this.cards.find(card => card.id == cardId); //ищем текущую карту
 
+            //считаем кол-во выполненых задач в текущей карте
             let doneTasks = 0;
-            let globalCurrentTask = {};
+            let globalCurrentTask = {}; // строчка которую мы тыкнули
             for (let i = 0; i < currentCard.tasks.length; i++) {
                 let currentTask = currentCard.tasks[i];
                 if (currentTask.id == taskId) {
@@ -161,8 +152,6 @@ Vue.component('create-card', {
                 }
             }
 
-
-
             let halfDoneTasks = doneTasks / currentCard.tasks.length;
             if (firstColumnCards == 3 && secondColumnCards == 5 &&
                 currentCard.column == 0 && halfDoneTasks >= 0.5)
@@ -172,10 +161,6 @@ Vue.component('create-card', {
                 return;
             }
 
-            console.log(doneTasks == currentCard.tasks.length);
-            console.log(doneTasks);
-            console.log(currentCard.tasks.length);
-            console.log(currentCard.column);
             // если задание выполнено на 100% то переносим в 3 столбец 
             if (currentCard.column == 1 && doneTasks == currentCard.tasks.length) {
                 currentCard.column = 2;
@@ -201,16 +186,4 @@ Vue.component('create-card', {
 
 let app = new Vue({
     el: '#app',
-    data: {
-        premium: true,
-        cart: []
-    },
-    methods: {
-        updateCart(id) {
-            this.cart.push(id);
-        },
-        deleteCart() {
-            this.cart.pop();
-        },
-    }
-})
+});
