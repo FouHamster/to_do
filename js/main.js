@@ -67,6 +67,10 @@ Vue.component('create-card', {
         };
     },
 
+    created() {
+        this.cards = JSON.parse(localStorage.getItem('cards')) || [];
+    },
+
     methods: {
         deleteTask(id) {
             if (this.tasks.length === 3) {     
@@ -114,6 +118,9 @@ Vue.component('create-card', {
             }
 
             this.cards.push(cardItem);
+            
+            // записываем карточки в локал сторе
+            localStorage.setItem('cards', JSON.stringify(this.cards));
 
             // занулить данные формы
             this.title = "";
@@ -145,6 +152,8 @@ Vue.component('create-card', {
                 let currentTask = currentCard.tasks[i];
                 if (currentTask.id == taskId) {
                     currentTask.done = true;
+                    // записываем карточки в локал сторе
+                    localStorage.setItem('cards', JSON.stringify(this.cards));
                     globalCurrentTask = currentTask;
                 }
                 if (currentCard.tasks[i].done) {
@@ -158,12 +167,16 @@ Vue.component('create-card', {
             {
                 globalCurrentTask.done = false;
                 alert("Освободите место во второй колонке");
+                // записываем карточки в локал сторе
+                localStorage.setItem('cards', JSON.stringify(this.cards));
                 return;
             }
 
             // если задание выполнено на 100% то переносим в 3 столбец 
             if (currentCard.column == 1 && doneTasks == currentCard.tasks.length) {
                 currentCard.column = 2;
+                // записываем карточки в локал сторе
+                localStorage.setItem('cards', JSON.stringify(this.cards));
                 return;
             }
 
@@ -172,13 +185,17 @@ Vue.component('create-card', {
                 if (secondColumnCards == 5) {
                     globalCurrentTask.done = false;
                     alert("Максимальное количество карт во втором столбце");
+                    // записываем карточки в локал сторе
+                    localStorage.setItem('cards', JSON.stringify(this.cards));
                     return;
                 }
                 currentCard.column = 1;
                 let date = new Date();
                 let options = { weekday: 'long', year: 'numeric', month: 'long', 
                     day: 'numeric', hour: 'numeric', minute:'numeric', second: 'numeric'};
-                currentCard.date = date.toLocaleDateString('ru', options)
+                currentCard.date = date.toLocaleDateString('ru', options);
+                // записываем карточки в локал сторе
+                localStorage.setItem('cards', JSON.stringify(this.cards));
             }
         }
     }
