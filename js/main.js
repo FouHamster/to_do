@@ -100,7 +100,7 @@ Vue.component('create-card', {
         addCard() {
             for (let i = 0; i < this.tasks.length; i++) {
                 if (this.tasks[i].name == "") {
-                    alert("Задача не может быть пустой");
+                    this.tasks.splice(i, 1);
                     return;
                 }
             }
@@ -199,17 +199,20 @@ Vue.component('create-card', {
                     alert("Максимальное количество карт во втором столбце");
                     // записываем карточки в локал сторе
                     localStorage.setItem('cards', JSON.stringify(this.cards));
+                    this.isButtonDisabled = true;
                     return;
+                }else {
+                        this.isButtonDisabled = false;
                 }
                 currentCard.column = 1;
                 secondColumnCards++;
-                if (secondColumnCards == 5) 
-                {
-                    this.isButtonDisabled = true;
-                }
-                else {
-                    this.isButtonDisabled = false;
-                }
+                // if (secondColumnCards == 5) 
+                // {
+                //     this.isButtonDisabled = true;
+                // }
+                // else {
+                //     this.isButtonDisabled = false;
+                // }
 
                 let date = new Date();
                 let options = { weekday: 'long', year: 'numeric', month: 'long', 
