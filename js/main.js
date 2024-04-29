@@ -90,6 +90,8 @@ Vue.component('create-card', {
                 return;
             }
 
+           
+
             this.tasks.push({
                 id: this.tasks.length + 1,
                 name: "Описание задачи",
@@ -115,6 +117,14 @@ Vue.component('create-card', {
             if (firstColumnCards == 3) {
                 alert("В первой колонке максимальное количество карточек");
                 return;
+            }
+
+            for (let i = 0; i < this.tasks.length; i++) {
+                if (this.tasks[i].name == "") {
+                    alert("Задача не может быть пустой!");
+                    return;
+                }
+                
             }
 
             this.cards.push(cardItem);
